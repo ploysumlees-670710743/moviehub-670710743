@@ -1,17 +1,40 @@
 import MovieGrid from '../components/MovieGrid';
 import { useAuth } from '../auth/AuthContext';
+import { useEffect, useState } from 'react' ;
+import { getWishlist } from '../api/backend';
 // TODO ขั้นที่ 4 (Lab): import { useEffect, useState } from 'react' และ import { getWishlist } from '../api/backend';
 
 // หน้า "รายการที่อยากดู" ของสมาชิกที่ login อยู่ (เส้นทาง /me/wishlist ครอบด้วย ProtectedRoute แล้ว)
 function Wishlist() {
-  const { member } = useAuth();                  // TODO ขั้นที่ 4 (Lab): ดึง token มาด้วย
+  const { member, token } = useAuth();                  // TODO ขั้นที่ 4 (Lab): ดึง token มาด้วย
 
   // TODO ขั้นที่ 4 (Lab): เปลี่ยน 3 ค่าคงที่เป็น state แล้วโหลดด้วย useEffect
   //   const list = await getWishlist(token)  ได้ { items } ที่เป็นรูปร่างเดียวกับการ์ดหนัง MovieGrid ใช้ได้เลย
-  //   dependency คือ [token]  ทำการบ้านอันนี้
-  const movies = [];
-  const status = 'success';
-  const error = null;
+  //   dependency คือ [token]  ทำการบ้านอันนี้ 
+  const [movies, setMovies] = useState([]);
+  const [status, setStatus] = useState('loading');
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+  async function loadWishlist() {
+    setStatus('loading');
+    setError(null);
+
+    try {
+      const { items } = await getWishlist(token);
+
+      setMovies(items);
+      setStatus('success');
+    } catch (err) {
+      setError(err);
+      setStatus('error');
+    }
+  }
+
+  if (token) {
+    loadWishlist();
+  }
+}, [token]);
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-10 md:px-6">

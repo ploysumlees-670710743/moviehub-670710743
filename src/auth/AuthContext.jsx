@@ -13,7 +13,7 @@ export function AuthProvider({ children }) {
   const [token, setToken] = useState(() => localStorage.getItem(TOKEN_KEY));
   const [member, setMember] = useState(() => JSON.parse(localStorage.getItem(MEMBER_KEY) || 'null'));
 
-  function remember({ token, member }) {
+  function remember({ token, member }) { 
     setToken(token);
     setMember(member);
     localStorage.setItem(TOKEN_KEY, token);

@@ -52,7 +52,7 @@ export function putVote(movieId, score, token) {
   return apiFetch(`/api/movies/${movieId}/vote`, { method: 'PUT', body: { score }, token });
 }
 
-// ---------- Wishlist ----------
+// ---------- Wishlist ---------- 
 export function getWishlist(token) {
   return apiFetch('/api/me/wishlist', { token });                                       // ได้ { items }
 }
